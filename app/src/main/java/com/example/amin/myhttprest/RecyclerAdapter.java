@@ -13,9 +13,6 @@ import com.example.amin.myhttprest.model.Recipes;
 
 import java.util.List;
 
-/**
- * Created by Amin on 2/3/2018.
- */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NumberViewHolder> {
 
