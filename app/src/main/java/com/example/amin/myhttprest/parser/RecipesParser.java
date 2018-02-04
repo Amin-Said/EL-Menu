@@ -14,7 +14,6 @@ public class RecipesParser {
 
         try {
 
-
         JSONArray ar = new JSONArray(content);
         List<Recipes> recipeslist = new ArrayList<>();
         for (int i =0 ; i < ar.length(); i++){

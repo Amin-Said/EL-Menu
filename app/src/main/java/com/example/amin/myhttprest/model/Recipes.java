@@ -1,6 +1,8 @@
 package com.example.amin.myhttprest.model;
 
 
+import android.graphics.Bitmap;
+
 public class Recipes {
     private int reciepe_Id;
     private String name;
@@ -9,6 +11,7 @@ public class Recipes {
     private String chef;
     private String thumbnail;
     private String timestamp;
+    private Bitmap bitmap;
 
     public int getReciepe_Id() {
         return reciepe_Id;
@@ -64,5 +67,13 @@ public class Recipes {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

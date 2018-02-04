@@ -6,7 +6,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,20 +29,23 @@ public class MainActivity extends AppCompatActivity {
     TextView output = null;
     private ShimmerFrameLayout mShimmerViewContainer;
 
+    private final int num_list_Items = 100;
+    private RecyclerAdapter mAdapter;
+    private RecyclerView mNumberLists;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        output = (TextView) findViewById(R.id.server_content);
-        output.setMovementMethod(new ScrollingMovementMethod());
-
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
         mShimmerViewContainer.setVisibility(View.INVISIBLE);
 
-    }
 
+        mNumberLists =  findViewById(R.id.recycler_view);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,12 +60,10 @@ public class MainActivity extends AppCompatActivity {
             if (isOnline()) {
                 if (tasks.size() == 0) {
                     requestData("https://api.androidhive.info/json/shimmer/menu.php");
-                }else{
-                    mShimmerViewContainer.setVisibility(View.INVISIBLE);
-                    Toast.makeText(MainActivity.this, "You already get the data", Toast.LENGTH_LONG).show();
                 }
+
             } else {
-                mShimmerViewContainer.stopShimmerAnimation();
+                mShimmerViewContainer.setVisibility(View.INVISIBLE);
                 Toast.makeText(MainActivity.this, "Network Unavailable", Toast.LENGTH_LONG).show();
             }
         }
@@ -79,8 +81,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (recipesList != null) {
+
             for (Recipes recipe : recipesList) {
-                output.append(recipe.getName() + "\n");
+
+                // refreshing recycler view
+                mAdapter = new RecyclerAdapter(this, recipesList);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+                mNumberLists.setLayoutManager(layoutManager);
+                mNumberLists.setHasFixedSize(true);
+                mNumberLists.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
             }
         }
 
@@ -119,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             recipesList = RecipesParser.parseFeed(result);
+
             // stop animating Shimmer and hide the layout
             mShimmerViewContainer.stopShimmerAnimation();
             mShimmerViewContainer.setVisibility(View.GONE);
